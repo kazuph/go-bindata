@@ -93,39 +93,9 @@ var _bintree = `)
 }
 
 func writeTOCTree(w io.Writer, toc []Asset) error {
-	_, err := fmt.Fprintf(w, `// AssetDir returns the file names below a certain
-// directory embedded in the file by go-bindata.
-// For example if you run go-bindata on data/... and data contains the
-// following hierarchy:
-//     data/
-//       foo.txt
-//       img/
-//         a.png
-//         b.png
-// then AssetDir("data") would return []string{"foo.txt", "img"}
-// AssetDir("data/img") would return []string{"a.png", "b.png"}
-// AssetDir("foo.txt") and AssetDir("notexist") would return an error
-// AssetDir("") will return []string{"data"}.
+	_, err := fmt.Fprintf(w, `// AssetDir returns only err
 func AssetDir(name string) ([]string, error) {
-	node := _bintree
-	if len(name) != 0 {
-		cannonicalName := strings.Replace(name, "\\", "/", -1)
-		pathList := strings.Split(cannonicalName, "/")
-		for _, p := range pathList {
-			node = node.Children[p]
-			if node == nil {
-				return nil, &os.PathError{Op: "open", Path: name, Err: os.ErrNotExist}
-			}
-		}
-	}
-	if node.Func != nil {
-		return nil, &os.PathError{Op: "open", Path: name, Err: os.ErrNotExist}
-	}
-	rv := make([]string, 0, len(node.Children))
-	for childName := range node.Children {
-		rv = append(rv, childName)
-	}
-	return rv, nil
+	return nil,  &os.PathError{Op: "open",  Path: name,  Err: os.ErrNotExist}
 }
 
 `)
